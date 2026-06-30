@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motivation</title>
+    <link rel="stylesheet" href="indexstyle.css">
+</head>
+<body>
+
+    <video loop muted playsinline id="bg-video">
+        <source src="https://www.dropbox.com/scl/fi/6cwty5l6t4b3d2kim884w/bgvideo1.mp4?rlkey=s4en2eunevbhhne156u5w3bls&st=xlhntdo2&raw=1" type="video/mp4">
+    </video>
+
+    <audio id="bg-music" src="phonk.mp3" loop></audio>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="container" id="content">
+        <p class="intro-text">
+            This is the story of a boy born beneath the shadow of poverty. Every generation before him accepted the curse. He refused. He chose to fight, to endure, and to become the man who would break the curse and change his bloodline forever.
+        </p>
+
+        <h1>
+            "IF YOU HAVE TO WALK THROUGH HELL,<br>
+            TO REACH HEAVEN,<br>
+            THEN WALK LIKE YOU OWN IT."
+        </h1>
+
+        <button onclick="enterDomain()">
+            ENTER THE DOMAIN OF LEGENDS
+        </button>
+    </div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<script>
+    const SUPABASE_URL = "https://pjcswgdaekxnbatgnaba.supabase.co"; 
+    const SUPABASE_KEY = "sb_publishable_fVlrYD_lcA5P6IUeVlmvdA_joizChYU"; 
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let currentSteps = 0;
+
+    async function loadInitialSteps() {
+    try {
+        const { data, error } = await supabaseClient.from('user_progress').select('*');
+        if (error) {
+            console.error("Database connection error:", error);
+            currentSteps = 150; // Safeguard fallback
+        } else if (data && data.length > 0) {
+            // Make sure the column name matches your database exactly!
+            currentSteps = data[0].Total_steps;
+            console.log("Steps successfully fetched:", currentSteps);
+        } else {
+            currentSteps = 150; // Safeguard if table is completely empty
+        }
+    } catch (err) {
+        console.error("Failed to connect to Supabase backend:", err);
+        currentSteps = 150; 
+    }
+}
+
+    function enterDomain() {
+        const video = document.getElementById("bg-video");
+        const music = document.getElementById("bg-music");
+        const overlay = document.getElementById("overlay");
+        const content = document.getElementById("content");
+
+        video.play().catch(e => console.log("Video error:", e));
+        music.play().catch(e => console.log("Audio error:", e));
+
+        overlay.classList.add("reveal-video");
+        content.classList.add("fade-out");
+
+        setTimeout(() => {
+            content.innerHTML = `
+                <h1 class="cyan-glow">YOUR DESTINATION IS <span id="step-count">${currentSteps}</span> STEPS AWAY.</h1>
+                <p class="subtitle">CONQUER THE DAY TO BRING THE NUMBER DOWN.</p>
+                <div class="button-group">
+                    <a href="dashboard.html" class="redirect-btn">GO CLOSER TO GOAL</a>
+                </div>
+            `;
+            content.classList.remove("fade-out");
+        }, 1000);
+    }
+
+    window.onload = loadInitialSteps;
+</script>
+</body>
+</html>

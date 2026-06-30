@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conquer Dashboard</title>
+    <link rel="stylesheet" href="indexstyle.css">
+    
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body style="overflow-y: auto;"> 
+
+    <div class="overlay" style="background: rgba(0,0,0,0.85); z-index: -1;"></div>
+
+    <header class="main-header">
+        <div class="logo">DASHBOARD</div>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-item">HOME</a>
+        </nav>
+    </header>
+
+    <div class="container" style="height: auto; padding-top: 140px; justify-content: flex-start;">
+        
+        <h1 class="cyan-glow" style="font-size: 2.8rem; margin-bottom: 10px;">
+            <span id="live-steps">--</span> STEPS REMAINING
+        </h1>
+        <p class="subtitle" style="margin-bottom: 40px;">THE WORKSPACE OF THE UNBROKEN</p>
+
+        <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; width: 100%; max-width: 600px; padding: 30px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            
+            <h3 style="font-family: 'Cinzel', serif; letter-spacing: 2px; margin-bottom: 20px; color: #fff;">DAILY COMBAT LIST</h3>
+            
+           <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+    <input type="text" id="task-input" placeholder="WRITE YOUR TASK FOR THE DAY..." 
+           onkeydown="if(event.key === 'Enter') addTask()"
+           style="flex: 1; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: white; font-family: 'Poppins', sans-serif; letter-spacing: 1px;">
+    <button onclick="addTask()" style="padding: 12px 25px; border-radius: 8px; font-size: 0.9rem;">ADD</button>
+</div>
+
+            <div id="tasks-container" style="display: flex; flex-direction: column; gap: 15px;"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const SUPABASE_URL = "https://pjcswgdaekxnbatgnaba.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_fVlrYD_lcA5P6IUeVlmvdA_joizChYU"; 
+        
+        // Using the matching 'supabaseClient' name to completely avoid naming conflicts
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let currentRecordId = null;
+        let steps = 0;
+
+        async function fetchSteps() {
+            const { data, error } = await supabaseClient
+                .from('user_progress')
+                .select('*');
+
+            if (error) {
+                console.error("Fetch error:", error);
+            } else if (data && data.length > 0) {
+                currentRecordId = data[0].id;
+                steps = data[0].Total_steps; 
+                document.getElementById('live-steps').innerText = steps;
+            }
+        }
+
+        async function completeTask(checkboxElement) {
+            if (checkboxElement.checked && steps > 0 && currentRecordId !== null) {
+                steps -= 1;
+                
+                document.getElementById('live-steps').innerText = steps;
+
+                const { error } = await supabaseClient
+                    .from('user_progress')
+                    .update({ Total_steps: steps })
+                    .eq('id', currentRecordId);
+
+                if (error) console.error("Update error:", error);
+                
+                checkboxElement.parentElement.style.textDecoration = "line-through";
+                checkboxElement.parentElement.style.opacity = "0.5";
+                checkboxElement.disabled = true; 
+            }
+        }
+
+        function addTask() {
+    const input = document.getElementById('task-input');
+    const container = document.getElementById('tasks-container');
+
+    if (input.value.trim() !== "") {
+        const taskRow = document.createElement('div');
+        taskRow.style.cssText = "display: flex; align-items: center; justify-content: space-between; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; border-left: 3px solid #00f3ff; transition: 0.3s;";
+
+        // Wrapped the checklist text and checkbox in a wrapper, and added a sleek delete button on the right
+        taskRow.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                <input type="checkbox" onchange="completeTask(this)" style="transform: scale(1.4); cursor: pointer; accent-color: #00f3ff;">
+                <span style="font-family: 'Poppins', sans-serif; letter-spacing: 1px; color: #e0e0e0;">${input.value.toUpperCase()}</span>
+            </div>
+            <button onclick="this.parentElement.remove()" style="background: none; border: none; color: #ff4d4d; font-size: 1.2rem; cursor: pointer; font-weight: bold; padding: 0 5px; transition: 0.2s;" onmouseover="this.style.color='#ff1a1a'" onmouseout="this.style.color='#ff4d4d'">
+                ✕
+            </button>
+        `;
+
+        container.appendChild(taskRow);
+        input.value = ""; 
+    }
+}
+
+        window.onload = fetchSteps;
+    </script>
+</body>
+</html>

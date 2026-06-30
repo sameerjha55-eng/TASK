@@ -1,0 +1,245 @@
+/* ==========================================
+   1. FONTS & RESETS
+   ========================================== */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Poppins:wght@300;400;700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    overflow: hidden;
+    height: 100vh;
+    width: 100%;
+    background: black;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ==========================================
+   2. HIDDEN START VIDEO & SOLID BLACK OVERLAY
+   ========================================== */
+#bg-video{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+
+/* Starts as 100% pitch black to hide the video completely */
+.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(0, 0, 0); 
+    z-index: -1;
+    transition: background 1.5s ease; /* Smooth curtain reveal */
+}
+
+/* Triggers on click: transforms the pitch black into a transparent cinematic tint */
+.overlay.reveal-video {
+    background: rgba(0, 0, 0, 0.2); /* Subtle cinematic tint for the video */
+}
+
+/* ==========================================
+   3. CONTAINER & HEAVY INTENSE AURA TEXT
+   ========================================== */
+.container{
+    position: relative;
+    z-index: 1;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Intro Paragraph Styling */
+.container .intro-text{
+    font-family: 'cinzel', serif!important ;
+    width: 80%;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #e0e0e0;
+    letter-spacing: 3px;
+    line-height: 1.8;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+    /* Soft ghost glow */
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+/* Cinematic Title (Using premium serif font 'Cinzel') */
+.container h1{
+    font-family: 'Cinzel', serif;
+    font-size: 3.2rem;
+    max-width: 1200px;
+    line-height: 1.3;
+    letter-spacing: 6px;
+    font-weight: 800;
+    margin-bottom: 60px;
+    text-transform: uppercase;
+
+    /* Ultra Heavy White Aura Glow */
+    text-shadow:
+        0 0 15px rgba(255, 255, 255, 0.7),
+        0 0 35px rgba(255, 255, 255, 0.4),
+        0 0 70px rgba(255, 255, 255, 0.2),
+        
+}
+
+/* Heavy Cyan Aura Glow for the choice screen header */
+.cyan-glow {
+    color: #00f3ff !important;
+    text-shadow:
+        0 0 10px rgba(0, 243, 255, 0.8),
+        0 0 25px rgba(0, 243, 255, 0.5),
+        0 0 50px rgba(0, 243, 255, 0.3) !important;
+}
+
+/* ==========================================
+   4. PREMIUM LIGHTNING BUTTON LAYOUTS
+   ========================================== */
+button, .redirect-btn{
+    padding: 18px 45px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 40px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+button:hover, .redirect-btn:hover{
+    background: white;
+    color: black;
+    transform: scale(1.08);
+    /* Massive hyper neon aura glow explosion on hover */
+    box-shadow:
+        0 0 15px #fff,
+        0 0 35px #fff,
+        0 0 65px #fff;
+}
+
+/* Choice screen button group adjustments */
+.button-group {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* ==========================================
+   5. TRANSITIONS (JAVASCRIPT COUPLING)
+   ========================================== */
+#content {
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-out {
+    opacity: 0;
+    transform: scale(0.93);
+    pointer-events: none;
+}
+/* Hard-hitting subtitle design */
+.subtitle {
+    font-family: 'Cinzel', serif !important;
+    font-size: 1.4rem !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    letter-spacing: 5px !important;
+    text-transform: uppercase;
+    margin-bottom: 50px !important;
+    
+    /* Neon tracking glow */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Force uppercase on buttons for an aggressive layout */
+.redirect-btn {
+    font-family: 'Cinzel', serif !important;
+    letter-spacing: 3px !important;
+}
+#bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    
+    /* FORCE CRISP RENDERING */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+/* --- Premium Navigation Header --- */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 40px; /* Moves text away from the absolute screen edges */
+    display: flex;
+    justify-content: space-between; /* Pushes DASHBOARD to left, HOME to right */
+    align-items: center;
+    background: rgba(0, 0, 0, 0.4); /* Subtle transparent backdrop */
+    backdrop-filter: blur(10px); /* Modern frosted-glass effect */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 100; /* Keeps it on top of background videos */
+    box-sizing: border-box;
+}
+
+/* "DASHBOARD" Branding Styling */
+.logo {
+    font-family: 'Cinzel', serif; /* Keeps your theme font consistent */
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Navigation Links Wrapper */
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+/* "HOME" Button Link Styling */
+.nav-item {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #888; /* Dim default color */
+    text-decoration: none; /* Kills the ugly purple underline */
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 20px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Hover glow effect for the button */
+.nav-item:hover {
+    color: #00f3ff; /* Snaps to theme cyan */
+    border-color: #00f3ff;
+    background: rgba(0, 243, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+}
